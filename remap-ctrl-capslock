@@ -1,0 +1,17 @@
+#!/bin/sh
+# See http://www-2.cs.cmu.edu/~pach/ctrl-caps-win
+# It's not clear what the Mod4 thing does.
+#
+# The windows key used to be 115 but is now 133 in xorg
+# using evdev in Linux.
+#
+if [ $DISPLAY ]; then
+xmodmap -e 'remove Lock = Caps_Lock' \
+    -e 'remove Control = Control_L' \
+    -e 'remove Mod4 = Super_L' \
+    -e 'keycode 66 = Control_L' \
+    -e 'add Control = Control_L' \
+    -e 'keycode 133 = Caps_Lock' \
+    -e 'add Lock = Caps_Lock' \
+    -e 'keycode 227 = XF86Start'
+fi
