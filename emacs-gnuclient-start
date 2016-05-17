@@ -1,0 +1,25 @@
+#!/bin/sh
+# Wrapper for editing with emacs in a client or creating a new emacs instance and then connecting to it.
+font='6x13'
+
+if [ -t 0 ]; then
+    if [ -z "$@" ]; then
+	target="-f ibuffer"
+    else
+	target="$@"
+    fi
+
+    if [ $DISPLAY ]; then
+	# Current but with Ion3. Default geometry of 80x24 is not resized.
+	gnuclient -q "$target" >&/dev/null || emacs -fg grey -bg black -fn $font "$target" --geometry 82x24 &
+    else
+	gnuclient -q "$target" >&/dev/null || emacs -fg grey -bg black -fn $font "$target"
+    fi
+else
+    # not in a terminal
+    target=`mktemp`
+    cat > $target
+    gnuclient "$target" >&/dev/null || emacs -fg grey -bg black -fn $font "$target" --geometry 82x24
+    echo rm $target
+    rm $target
+fi
