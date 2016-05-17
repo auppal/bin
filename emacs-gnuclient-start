@@ -3,23 +3,23 @@
 font='6x13'
 
 if [ -t 0 ]; then
-    if [ -z "$@" ]; then
+  if [ -z "$@" ]; then
 	target="-f ibuffer"
-    else
+  else
 	target="$@"
-    fi
+  fi
 
-    if [ $DISPLAY ]; then
+  if [ $DISPLAY ]; then
 	# Current but with Ion3. Default geometry of 80x24 is not resized.
-	gnuclient -q "$target" >&/dev/null || emacs -fg grey -bg black -fn $font "$target" --geometry 82x24 &
-    else
-	gnuclient -q "$target" >&/dev/null || emacs -fg grey -bg black -fn $font "$target"
-    fi
+	gnuclient -q "$target" >/dev/null 2>&1 || emacs -fg grey -bg black -fn $font "$target" --geometry 82x24 &
+  else
+	gnuclient -q "$target" >/dev/null 2>&1 || emacs -fg grey -bg black -fn $font "$target"
+  fi
 else
-    # not in a terminal
-    target=`mktemp`
-    cat > $target
-    gnuclient "$target" >&/dev/null || emacs -fg grey -bg black -fn $font "$target" --geometry 82x24
-    echo rm $target
-    rm $target
+  # not in a terminal
+  target=`mktemp`
+  cat > $target
+  gnuclient "$target" >/dev/null 2>&1 || emacs -fg grey -bg black -fn $font "$target" --geometry 82x24
+  echo rm $target
+  rm $target
 fi
